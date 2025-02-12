@@ -1,2 +1,3 @@
 # flash_card_app
-Flash Card
+
+I"m making a flash card app using tkinter and excel in python.
