@@ -17,29 +17,43 @@ english_value = list(data_dict["English"].values())[values]
 french_value = list(data_dict["French"].values())[values]
 
 # Button Commands
-def confirm_cancel():
-    global word
+def next():
+    global timer
+    window.after_cancel(timer)
     values = random.randint(0, 100)
     english_value = list(data_dict["English"].values())[values]
     french_value = list(data_dict["French"].values())[values]
-    canvas.delete(word)
-    word = canvas.create_text(400, 263, text=french_value, font=("Ariel", 60, "bold"))
+    canvas.itemconfig(title, text="French", fill="black")
+    canvas.itemconfig(word, text=french_value, fill="black")
+    canvas.itemconfig(first_image, image=img)
+    timer = window.after(3000, func=flip)
+
+# Time change
+def flip():
+    
+    canvas.itemconfig(first_image, image=new_image)
+    canvas.itemconfig(title, text="English", fill="white")
+    canvas.itemconfig(word, text=english_value, fill="White")
 
 # Card Image
 canvas = Canvas(width=800, height=526)
 img = PhotoImage(file="images/card_front.png")
-canvas.create_image(400, 250, image=img)
-title = canvas.create_text(400, 150, text="Title", font=("Ariel", 40, "italic"))
+first_image = canvas.create_image(400, 250, image=img)
+new_image = PhotoImage(file="images/card_back.png")
+title = canvas.create_text(400, 150, text="French", font=("Ariel", 40, "italic"))
 word = canvas.create_text(400, 263, text="word", font=("Ariel", 60, "bold"))
 canvas.grid(column=0, row=0, columnspan=2)
 
 # Buttons
 cancel_image = PhotoImage(file="images/wrong.png")
-cancel_button = Button(image=cancel_image, highlightthickness=0, command=confirm_cancel)
+cancel_button = Button(image=cancel_image, highlightthickness=0, command=next)
 cancel_button.grid(column=0, row=1)
 
 confirm_image = PhotoImage(file="images/right.png")
-confirm_button = Button(image=confirm_image, highlightthickness=0, command=confirm_cancel)
+confirm_button = Button(image=confirm_image, highlightthickness=0, command=next)
 confirm_button.grid(column=1, row=1)
+
+# Start Timer
+timer = window.after(3000, flip)
 
 window.mainloop()
